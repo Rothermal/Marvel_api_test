@@ -1,5 +1,5 @@
 /**
- * Created by JFCS on 3/2/16.
+ * Created by JFCS on 3/4/16.
  */
 var express = require('express');
 var randomNumber = require('../modules/randomNumber');
@@ -16,14 +16,14 @@ var apiHash = md5Hash;
 
 
 router.get('/',function(req,res){
-    var offset = randomNumber(1,1484);
+    var offset = randomNumber(1,68);
     var results = {};
-    var url = "http://gateway.marvel.com:80/v1/public/characters?limit=1&offset="+offset+"&";
+    var url ="http://gateway.marvel.com:80/v1/public/series?limit=1&offset="+offset+"&";
     needle.request('get',url,{
-    "apikey": apiKey,
-    "ts": apiTs,
-    "hash": apiHash
-        },function(error,response) {
+        "apikey": apiKey,
+        "ts": apiTs,
+        "hash": apiHash
+    },function(error,response) {
         results = response.body;
         console.log(response.body);
         res.send(results);

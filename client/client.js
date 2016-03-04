@@ -2,7 +2,7 @@
  * Created by JFCS on 2/26/16.
  */
 var employeeArray = [];
-//var primaryKey = 0;
+var primaryKey = 0;
 var randomNum = 0;
 var marvelArray=[];
 var marvelCharId = 0;
@@ -73,12 +73,6 @@ function processForm(event){
         values[field.name] = field.value;
     });
     console.log(values);
-    // ryans version of serialize array.
-    // var formDataArray = $('employee-form').serializeArray();
-    // console.log(formDataArray);
-    // for (var i = 0; i<formDataArray.length;i++){
-    //  values[formDataArray[i].name] = formDataArray[i].value;
-    // }
     marvel(values);
     employeeArray.push(values);
     $('#employee-form').find('input[type=text],input[type=number]').val("");
@@ -132,16 +126,10 @@ function randomNumber(min, max) {
 }
 
 function randomCharacter (){
-    var offset = randomNumber(1,1484);
     var employee = {};
     $.ajax({
         type:'GET',
-        url: "http://gateway.marvel.com:80/v1/public/characters?limit=1&offset="+offset+"&",
-        data:
-        {"apikey":apiKey,
-            "ts": apiTs,
-            "hash": apiHash},
-        headers: {   Accept:'*/*' },
+        url:'/characters',
         success: function(response){
             console.log(response);
             results = response.data.results;
@@ -179,76 +167,69 @@ function AppendDom(employee) {
     $el.append('<p>Name: ' + employee.firstName + ' ' + employee.lastName + '</p>');
     $el.append('<p>Id #: ' + employee.employeeId + '</p>');
     $el.append('<p>Alias: ' + employee.employeeTitle + '</p>');
-    $el.append('<p>Salary: ' + employee.employeeSalary + '</p>');
     $el.append('<img class="img-responsive img-circle" src=' + employee.image + ' >');
     $el.append('<p>BackStory: ' + employee.description + '</p>');
     $el.append('<button class="btn btn-danger delete"> Remove Employee </button>');
     $el.append('<button class="btn btn-primary moreinfo"> More Info </button>');
 }
 
-function randomComic (){
-    var offset = randomNumber(1,36508);
-    var employee = {};
-    $.ajax({
-        type:'GET',
-        url: "http://gateway.marvel.com:80/v1/public/comics?limit=1&offset="+offset+"&",
-        data:
-        {"apikey":apiKey,
-            "ts": apiTs,
-            "hash": apiHash},
-        headers: {   Accept:'*/*' },
-        success: function(response){
-            console.log(response);
-            results = response.data.results;
-            if(results.length > 0) {
-                randomNum = randomNumber(0,results.length -1);
-                marvelApiImage = results[randomNum].thumbnail.path + "/standard_xlarge.jpg";
-                marvelCharId = results[randomNum].id;
-                marvelName = results[randomNum].title;
-                if(results[randomNum].description !== null) {
-                    marvelApiDescription = results[randomNum].description;
-                } else {
-                    marvelApiDescription = "No description Available ";
-                }
-                console.log(marvelCharId);
-            } else {
-                marvelApiImage = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/standard_xlarge.jpg";
-                marvelApiDescription = "No description Available ";
-            }
-            employee.employeeTitle = marvelName;
-            employee.image = marvelApiImage;
-            employee.description = marvelApiDescription;
-            employee.employeeId = marvelCharId;
-            marvelArray.push(response);
-            AppendDomComic(employee);
-        }
-    });
-}
+//function randomComic (){
+//    var offset = randomNumber(1,36508);
+//    var employee = {};
+//    $.ajax({
+//        type:'GET',
+//        url: "http://gateway.marvel.com:80/v1/public/comics?limit=1&offset="+offset+"&",
+//        data:
+//        {"apikey":apiKey,
+//            "ts": apiTs,
+//            "hash": apiHash},
+//        headers: {   Accept:'*/*' },
+//        success: function(response){
+//            console.log(response);
+//            results = response.data.results;
+//            if(results.length > 0) {
+//                randomNum = randomNumber(0,results.length -1);
+//                marvelApiImage = results[randomNum].thumbnail.path + "/standard_xlarge.jpg";
+//                marvelCharId = results[randomNum].id;
+//                marvelName = results[randomNum].title;
+//                if(results[randomNum].description !== null) {
+//                    marvelApiDescription = results[randomNum].description;
+//                } else {
+//                    marvelApiDescription = "No description Available ";
+//                }
+//                console.log(marvelCharId);
+//            } else {
+//                marvelApiImage = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/standard_xlarge.jpg";
+//                marvelApiDescription = "No description Available ";
+//            }
+//            employee.employeeTitle = marvelName;
+//            employee.image = marvelApiImage;
+//            employee.description = marvelApiDescription;
+//            employee.employeeId = marvelCharId;
+//            marvelArray.push(response);
+//            AppendDomComic(employee);
+//        }
+//    });
+//}
 function AppendDomComic(employee) {
     primaryKey++;
     employee.key = primaryKey;
     $('.empContainer').append("<div class='well col-sm-3'></div>");
     $el = $('.empContainer').children().last();
     $el.data('data', employee.key);
-    $el.append('<p>Name: ' + employee.firstName + ' ' + employee.lastName + '</p>');
+    //$el.append('<p>Name: ' + employee.firstName + ' ' + employee.lastName + '</p>');
     $el.append('<p>Id #: ' + employee.employeeId + '</p>');
-    $el.append('<p>Alias: ' + employee.employeeTitle + '</p>');
+    $el.append('<p>Title: ' + employee.employeeTitle + '</p>');
     $el.append('<img class="img-responsive " src=' + employee.image + ' >');
-    $el.append('<p>BackStory: ' + employee.description + '</p>');
+    $el.append('<p>Story: ' + employee.description + '</p>');
     $el.append('<button class="btn btn-danger delete"> Remove Employee </button>');
     //$el.append('<button class="btn btn-primary moreinfo"> More Info </button>');
 }
 function randomSeries (){
-    var offset = randomNumber(1,68);
     var employee = {};
     $.ajax({
-        type:'GET',
-        url: "http://gateway.marvel.com:80/v1/public/series?limit=1&offset="+offset+"&",
-        data:
-        {"apikey":apiKey,
-            "ts": apiTs,
-            "hash": apiHash},
-        headers: {   Accept:'*/*' },
+            type:'GET',
+            url:'/series',
         success: function(response){
             console.log(response);
             results = response.data.results;
@@ -276,3 +257,40 @@ function randomSeries (){
         }
     });
 }
+
+function randomComic (){
+
+    var employee = {};
+    $.ajax({
+        type:'GET',
+        url:'/comic',
+        success: function(response){
+            console.log(response);
+            employeeArray.push(response);
+            console.log(employeeArray);
+            results = response.data.results;
+            if(results.length > 0) {
+                randomNum = randomNumber(0,results.length -1);
+                marvelApiImage = results[randomNum].thumbnail.path + "/standard_xlarge.jpg";
+                marvelCharId = results[randomNum].id;
+                marvelName = results[randomNum].title;
+                if(results[randomNum].description !== null) {
+                    marvelApiDescription = results[randomNum].description;
+                } else {
+                    marvelApiDescription = "No description Available ";
+                }
+                console.log(marvelCharId);
+            } else {
+                marvelApiImage = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/standard_xlarge.jpg";
+                marvelApiDescription = "No description Available ";
+            }
+            employee.employeeTitle = marvelName;
+            employee.image = marvelApiImage;
+            employee.description = marvelApiDescription;
+            employee.employeeId = marvelCharId;
+            marvelArray.push(response);
+            AppendDomComic(employee);
+        }
+    });
+}
+
