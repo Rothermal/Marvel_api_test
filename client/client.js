@@ -34,15 +34,21 @@ function enable(){
 
 }
 
-function Employee(firstname, lastname, id , title, salary ) {
-    this.firstName = firstname;
-    this.lastName = lastname;
-    this.employeeId = id;
-    this.employeeTitle = title ;
-    this.employeeSalary = salary ;
 
-    employeeArray.push(this);
-}
+var randomNumber = function (min, max) {
+    return Math.floor(Math.random() * (1 + max - min) + min);
+
+};
+
+//function Employee(firstname, lastname, id , title, salary ) {
+//    this.firstName = firstname;
+//    this.lastName = lastname;
+//    this.employeeId = id;
+//    this.employeeTitle = title ;
+//    this.employeeSalary = salary ;
+//
+//    employeeArray.push(this);
+//}
 
 
 function deleteEmployee(){
