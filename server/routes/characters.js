@@ -16,16 +16,19 @@ var apiHash = md5Hash;
 
 
 router.get('/',function(req,res){
+
     var offset = randomNumber(1,1484);
     var results = {};
-    var url = "http://gateway.marvel.com:80/v1/public/characters?limit=1&offset="+offset+"&";
+    var url = "http://gateway.marvel.com:80/v1/public/characters?";
     needle.request('get',url,{
+    "limit": 1,
+    "offset": offset,
     "apikey": apiKey,
     "ts": apiTs,
     "hash": apiHash
         },function(error,response) {
         results = response.body;
-        console.log(response.body);
+        //console.log(response.body.data.results[0].name);
         res.send(results);
 
     });

@@ -143,7 +143,7 @@ function randomCharacter (){
                 } else {
                     marvelApiDescription = "No Back Story Available ";
                 }
-                console.log(marvelCharId);
+
             } else {
                 marvelApiImage = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available/standard_xlarge.jpg";
                 marvelApiDescription = "No Back Story Available ";
